@@ -3,54 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duggie Courses</title>
+  <title>My Course Store</title>
   <style>
-    body { font-family: Arial; margin: 0; background: #f5f5f5; }
-    header { background: #222; color: white; padding: 15px; text-align: center; }
-    .container { padding: 20px; text-align: center; }
-    .course { background: white; margin: 15px auto; padding: 20px; border-radius: 10px; width: 300px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    button { padding: 10px 15px; border: none; background: #007bff; color: white; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #0056b3; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: white;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+    }
+    .course-preview {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+    }
+    .locked {
+      filter: blur(5px);
+      pointer-events: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Duggie Online Courses</h1>
-  <p>Learn & Grow 🚀</p>
-</header>
-
 <div class="container">
-  <h2>Available Courses</h2>
+  <h1>My Course</h1>
 
-  <div class="course">
-    <h3>Course 1: Beginner Course</h3>
-    <p>Price: FREE</p>
-    <button onclick="accessCourse('Course 1')">Access</button>
+  <div class="course-preview">
+    <iframe id="courseFrame" src="https://canva.link/jwwtfdsjiy654jf"></iframe>
+    <div id="lockOverlay">
+      <p>🔒 Full course locked. Pay $25 to unlock.</p>
+      <button onclick="payNow()">Buy Now</button>
+    </div>
   </div>
-
-  <div class="course">
-    <h3>Course 2: Intermediate Course</h3>
-    <p>Price: ₹499</p>
-    <button onclick="buyCourse('Course 2', 499)">Buy Now</button>
-  </div>
-
-  <div class="course">
-    <h3>Course 3: Advanced Course</h3>
-    <p>Price: ₹999</p>
-    <button onclick="buyCourse('Course 3', 999)">Buy Now</button>
-  </div>
-
 </div>
 
 <script>
-  function accessCourse(course) {
-    alert('Opening ' + course);
+  const coursePrice = 25;
+
+  function payNow() {
+    let email = prompt("Enter your email to continue:");
+    if (!email) return;
+
+    // Simulated payment (replace with real gateway like Stripe/Razorpay)
+    let confirmPay = confirm("Pay $" + coursePrice + " to unlock?");
+
+    if (confirmPay) {
+      localStorage.setItem("paidUser", email);
+      alert("Payment successful! Course unlocked.");
+      unlockCourse(email);
+    }
   }
 
-  function buyCourse(course, price) {
-    alert('Redirecting to payment for ' + course + ' (₹' + price + ')');
+  function unlockCourse(email) {
+    document.getElementById("lockOverlay").style.display = "none";
+    document.getElementById("courseFrame").classList.remove("locked");
   }
+
+  function checkAccess() {
+    let savedEmail = localStorage.getItem("paidUser");
+    if (savedEmail) {
+      unlockCourse(savedEmail);
+    }
+  }
+
+  checkAccess();
 </script>
 
 </body>
